@@ -3,7 +3,7 @@
 
 class Draw {
 	public:
-		void drawBall(Ball a, SDL_Renderer* renderer);
+		void drawBall(Ball &a, SDL_Renderer* renderer);
 		void drawPaddle(Paddle a, SDL_Renderer* renderer);
 
 		void drawScore(short int score, SDL_Renderer* renderer);

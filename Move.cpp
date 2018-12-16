@@ -12,6 +12,9 @@ void Move::resetPaddles(Paddle &a, Paddle &b) {
 void Move::moveBall(Ball &ball) {
 	float k = 5;
 	for (int i = 0; i < 4; i++) {//need to make the '4' into the size of the array of points or springs
+		//forces should be recalculated every frame, with gravity just being something added at the end
+								 
+								 
 		//change velocity by force
 		ball.points[i].velX += ball.points[i].forceX;
 		ball.points[i].velY += ball.points[i].forceY;

@@ -11,26 +11,9 @@ int main(int argc, char args[]) {
 
 	//randomness
 	srand((unsigned)time(0));
-	/*
-	//create the ball
-	Ball ball;
-	//set dimensions
-	ball.radius = 15;
 	
-	//create the players paddles
-	Paddle player1, player2;
-	//set dimensions
-	player1.width = 20;
-	player1.height = 100;
+	Ball ball;
 
-	player2.width = 20;
-	player2.height = 100;
-
-	//set other aspects
-	move.resetBall(ball);
-	move.resetPaddles(player1, player2);
-	*/
-	Ball ball = initialize.createBall();
 	//Paddle player1 = initialize.createPaddle();
 	//Paddle player2 = initialize.createPaddle();
 
@@ -53,8 +36,11 @@ int main(int argc, char args[]) {
 		input.keyboardInput(e);
 		
 		draw.drawBall(ball, initialize.renderer);
-		//collision.PointvsEdges;
-		//move.moveBall(ball);
+		for (int i = 0; i < 4; i++) {
+			collision.PointvsEdges(ball.points[i]);
+		}
+		
+		move.moveBall(ball);
 
 		//renders to screen
 		SDL_RenderPresent(initialize.renderer);

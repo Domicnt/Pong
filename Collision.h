@@ -49,6 +49,9 @@ struct Ball {
 	//at four just to make testing thing easier, it should be at 8 or 16
 	Point points[4];
 	Spring springs[4];
+
+	//constructor
+	Ball();
 };
 
 

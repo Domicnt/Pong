@@ -1,10 +1,9 @@
 #include "Common.h"
 
-void Draw::drawBall(Ball a, SDL_Renderer* renderer) {
+void Draw::drawBall(Ball &a, SDL_Renderer* renderer) {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	for (int i = 0; i < 4; i++) {
 		SDL_RenderDrawLine(renderer, (int)round(a.springs[i].a->x), (int)round(a.springs[i].a->y), (int)round(a.springs[i].b->x), (int)round(a.springs[i].b->y));
-		printf("%f + %f = %f\n", a.x, a.radius, a.points[0].y);
 	}
 }
 
