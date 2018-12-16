@@ -1,44 +1,63 @@
 #include "Common.h"
 #pragma once
 
+
+struct Point {
+	float x, y;
+	float velX, velY;
+	float forceX, forceY;
+};
+
+struct Spring {
+	Point* a;
+	Point* b;
+
+	float optimalDistance;
+	float currentDistance;
+};
+
 struct Paddle {
-	//position
-	double posX;
-	double posY;
+	float x;
+	float y;
 
-	//y axis speed
-	double velocity;
+	float velY;
+	float velX;
 
-	//angle and angular velocity
-	int angle;
-	double angularVel;
+	float forceX;
+	float forceY;
 
-	//size
-	int height;
-	int width;
+	//float angle;
+
+	Point points[18];
+	Spring springs[18];
 };
 
 struct Ball {
-	//position
-	double posX;
-	double posY;
+	float x;
+	float y;
 
-	//velocity vector
-	double velocity;
-	int angle;
+	float velY;
+	float velX;
 
-	//for gravity and such
-	double yVel;
-	double xVel;
+	float forceX;
+	float forceY;
 
-	//size
-	int radius;
+	float angle;
+
+	float radius;
+
+	//at four just to make testing thing easier, it should be at 8 or 16
+	Point points[4];
+	Spring springs[4];
 };
+
 
 class Collision {
 	public:
 		void BallvsEdge(Ball ball);
 		void BallvsPaddles(Ball ball, Paddle a, Paddle b);
+
+		void PointvsEdges(Point &point);
 
 		//bool for what edges the ball is colliding with
 		bool BallvsEdges[4];

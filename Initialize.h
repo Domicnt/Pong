@@ -4,6 +4,10 @@
 class Initialize {
 	public:
 		void init();
+
+		//Paddle createPaddle();
+		Ball createBall();
+
 		void close();
 		
 		SDL_Window* window = nullptr;

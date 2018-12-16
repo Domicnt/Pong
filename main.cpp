@@ -11,7 +11,7 @@ int main(int argc, char args[]) {
 
 	//randomness
 	srand((unsigned)time(0));
-
+	/*
 	//create the ball
 	Ball ball;
 	//set dimensions
@@ -20,7 +20,7 @@ int main(int argc, char args[]) {
 	//create the players paddles
 	Paddle player1, player2;
 	//set dimensions
-	player1.width = 25;
+	player1.width = 20;
 	player1.height = 100;
 
 	player2.width = 20;
@@ -29,6 +29,10 @@ int main(int argc, char args[]) {
 	//set other aspects
 	move.resetBall(ball);
 	move.resetPaddles(player1, player2);
+	*/
+	Ball ball = initialize.createBall();
+	//Paddle player1 = initialize.createPaddle();
+	//Paddle player2 = initialize.createPaddle();
 
 	//quit flag
 	bool quit = false;
@@ -47,21 +51,11 @@ int main(int argc, char args[]) {
 		SDL_SetRenderDrawColor(initialize.renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 
 		input.keyboardInput(e);
-		move.moveBall(ball);
-		move.movePaddles(player1, player2, input.pressedKeys);
-
-		collision.BallvsEdge(ball);
-		move.resolveBallvsEdge(ball, collision.BallvsEdges);
-
-		collision.BallvsPaddles(ball, player1, player2);
-		move.resolveBallvsPaddles(ball, player1, player2, collision.BallvsPaddle);
-
-		//draws game objects
+		
 		draw.drawBall(ball, initialize.renderer);
-		draw.drawPaddle(player1, initialize.renderer);
-		draw.drawPaddle(player2, initialize.renderer);
-		//draws score
-		draw.drawScore(collision.score, initialize.renderer);
+		//collision.PointvsEdges;
+		//move.moveBall(ball);
+
 		//renders to screen
 		SDL_RenderPresent(initialize.renderer);
 	}

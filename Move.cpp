@@ -1,86 +1,52 @@
 #include "Common.h"
 
 void Move::resetBall(Ball &ball) {
-	ball.posX = SCREEN_WIDTH / 2;
-	ball.posY = SCREEN_HEIGHT / 2;
-
-	//from 135 to 225 and from 45 to 315
-	if ((rand() % 2) + 1 == 1) {
-		ball.angle = (rand() % 90) + 135 + 1;
-	} else {
-		ball.angle = (rand() % 90) + 315 + 1;
-	}
-	if (ball.angle >= 360) ball.angle -= 360;
-	ball.velocity = maxBallVel;
-
-	ball.xVel = 0;
-	ball.yVel = 0;
+	
 }
 
 void Move::resetPaddles(Paddle &a, Paddle &b) {
-	a.posY = SCREEN_HEIGHT / 2;
-	a.posX = 32 + a.width / 2;
-	a.velocity = 0;
-
-	b.posY = SCREEN_HEIGHT / 2;
-	b.posX = SCREEN_WIDTH - 32 - b.width / 2;
-	b.velocity = 0;
+	
 }
 
 
 void Move::moveBall(Ball &ball) {
-	//actual movement
-	ball.posX += ball.velocity * cos(Pi / 180 * ball.angle);
-	ball.posY += ball.velocity * sin(Pi / 180 * ball.angle);
+	float k = 5;
+	for (int i = 0; i < 4; i++) {//need to make the '4' into the size of the array of points or springs
+		//change velocity by force
+		ball.points[i].velX += ball.points[i].forceX;
+		ball.points[i].velY += ball.points[i].forceY;
+		
+		//change position by velocity
+		ball.points[i].x += ball.points[i].velX;
+		ball.points[i].y += ball.points[i].velY;
 
-	//gravity and such
-	ball.posX += ball.xVel;
-	ball.posY += ball.yVel;
+		//calculate the length of springs
+		int a = i;
+		int b = a + 1;
+		if (b = 5) b = 0;
+
+		float deltaX = ball.points[a].x - ball.points[b].x;
+		float deltaY = ball.points[a].y - ball.points[b].y;
+		ball.springs[i].currentDistance = sqrt( pow(deltaX,2) + pow(deltaY,2));
+		float delta = ball.springs[i].optimalDistance - ball.springs[i].currentDistance;
+
+		deltaX /= ball.springs[i].currentDistance;
+		deltaY /= ball.springs[i].currentDistance;
+
+		if (ball.springs[i].currentDistance < ball.springs[i].optimalDistance) {
+			ball.springs[i].a->forceX += delta * deltaX;
+			ball.springs[i].a->forceY += delta * deltaY;
+			ball.springs[i].b->forceX -= delta * deltaX;
+			ball.springs[i].b->forceY -= delta * deltaY;
+		} else if (ball.springs[i].currentDistance > ball.springs[i].optimalDistance) {
+			ball.springs[i].a->forceX -= delta * deltaX;
+			ball.springs[i].a->forceY -= delta * deltaY;
+			ball.springs[i].b->forceX += delta * deltaX;
+			ball.springs[i].b->forceY += delta * deltaY;
+		}
+	}
 }
 
 void Move::movePaddles(Paddle &a, Paddle &b, bool pressedKeys[4]) {
 
-	if (pressedKeys[0] == true && a.posY - a.height / 2 >= 0) {
-		a.posY -= maxPaddleVel;
-	} if (pressedKeys[1] == true && a.posY + a.height / 2 <= SCREEN_HEIGHT) {
-		a.posY += maxPaddleVel;
-	}
-	if (pressedKeys[2] == true && b.posY - b.height / 2 >= 0) {
-		b.posY -= maxPaddleVel;
-	} if (pressedKeys[3] == true && b.posY + b.height / 2 <= SCREEN_HEIGHT) {
-		b.posY += maxPaddleVel;
-	}
-}
-
-
-void Move::resolveBallvsEdge(Ball &ball, bool BallvsEdges[4]) {
-	
-	if (BallvsEdges[1] == true && ball.angle > 180) {
-		//colliding with top
-		ball.posY = ball.radius;
-		ball.angle = 360 - ball.angle;
-	} else if (BallvsEdges[3] == true && ball.angle < 180) {
-		//colliding with bottom
-		ball.posY = SCREEN_HEIGHT - ball.radius;
-		ball.angle = 360 - ball.angle;
-	} if (BallvsEdges[0] == true) {
-		//colliding with left
-		ball.posX += SCREEN_WIDTH;
-		move.resetBall(ball);
-	} else if (BallvsEdges[2] == true) {
-		//colliding with right
-		ball.posX -= SCREEN_WIDTH;
-		move.resetBall(ball);
-	}
-	
-	if (ball.angle >= 360) ball.angle -= 360;
-	else if (ball.angle < 0) ball.angle += 360;
-}
-
-void Move::resolveBallvsPaddles(Ball &ball, Paddle &a, Paddle &b, bool BallvsPaddle[2]) {
-	if (BallvsPaddle[0] == true) {
-		ball.angle = 180 - ball.angle;
-	} else if (BallvsPaddle[1] == true) {
-		ball.angle = 180 - ball.angle;
-	}
 }

@@ -2,43 +2,14 @@
 
 void Draw::drawBall(Ball a, SDL_Renderer* renderer) {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-	int x = a.radius - 1;
-	int y = 0;
-	int dx = 1;
-	int dy = 1;
-	int err = dx - (a.radius << 1);
-
-	while (x >= y) {
-		SDL_RenderDrawPoint(renderer, (int)round(a.posX) + x, (int)round(a.posY) - y);
-		SDL_RenderDrawPoint(renderer, (int)round(a.posX) + x, (int)round(a.posY) + y);
-		SDL_RenderDrawPoint(renderer, (int)round(a.posX) - x, (int)round(a.posY) - y);
-		SDL_RenderDrawPoint(renderer, (int)round(a.posX) - x, (int)round(a.posY) + y);
-		SDL_RenderDrawPoint(renderer, (int)round(a.posX) + y, (int)round(a.posY) - x);
-		SDL_RenderDrawPoint(renderer, (int)round(a.posX) + y, (int)round(a.posY) + x);
-		SDL_RenderDrawPoint(renderer, (int)round(a.posX) - y, (int)round(a.posY) - x);
-		SDL_RenderDrawPoint(renderer, (int)round(a.posX) - y, (int)round(a.posY) + x);
-
-		if (err <= 0) {
-			y++;
-			err += dy;
-			dy += 2;
-		} else if (err > 0) {
-			x--;
-			dx += 2;
-			err += dx - (a.radius << 1);
-		}
+	for (int i = 0; i < 4; i++) {
+		SDL_RenderDrawLine(renderer, (int)round(a.springs[i].a->x), (int)round(a.springs[i].a->y), (int)round(a.springs[i].b->x), (int)round(a.springs[i].b->y));
+		printf("%f + %f = %f\n", a.x, a.radius, a.points[0].y);
 	}
 }
 
 void Draw::drawPaddle(Paddle a, SDL_Renderer* renderer) {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-
-	SDL_Rect destination;
-	destination.x = (int)round(a.posX) - a.width / 2;
-	destination.y = (int)round(a.posY) - a.height / 2;
-	destination.w = a.width;
-	destination.h = a.height;
-	SDL_RenderCopy(renderer, draw.loadTexture("Images/Box.png", renderer), nullptr, &destination);
 
 }
 
