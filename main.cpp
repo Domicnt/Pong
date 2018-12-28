@@ -14,8 +14,8 @@ int main(int argc, char args[]) {
 	
 	Ball ball;
 
-	//Paddle player1 = initialize.createPaddle();
-	//Paddle player2 = initialize.createPaddle();
+	Paddle player1, player2;
+	move.resetPaddles(player1, player2);
 
 	//quit flag
 	bool quit = false;
@@ -35,12 +35,17 @@ int main(int argc, char args[]) {
 
 		input.keyboardInput(e);
 		
-		draw.drawBall(ball, initialize.renderer);
-		for (int i = 0; i < 4; i++) {
-			collision.PointvsEdges(ball.points[i]);
-		}
-		
+		collision.PaddlesvsEdge(player1, player2);
+		collision.BallvsEdge(ball);
+
+		move.movePaddles(player1, player2, input.pressedKeys);
 		move.moveBall(ball);
+		//ball.points[0].x = SCREEN_WIDTH / 2;
+		//ball.points[0].y = SCREEN_HEIGHT / 2 - 20;
+
+		draw.drawBall(ball, initialize.renderer);
+		draw.drawPaddle(player1, initialize.renderer);
+		draw.drawPaddle(player2, initialize.renderer);
 
 		//renders to screen
 		SDL_RenderPresent(initialize.renderer);

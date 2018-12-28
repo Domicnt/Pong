@@ -2,14 +2,23 @@
 
 void Draw::drawBall(Ball &a, SDL_Renderer* renderer) {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	int b = 0;
 	for (int i = 0; i < 4; i++) {
-		SDL_RenderDrawLine(renderer, (int)round(a.springs[i].a->x), (int)round(a.springs[i].a->y), (int)round(a.springs[i].b->x), (int)round(a.springs[i].b->y));
+		b = i + 1;
+		if (i == 3) { b = 0; }
+		SDL_RenderDrawLine(renderer, (int)round(a.points[i].x), (int)round(a.points[i].y), (int)round(a.points[b].x), (int)round(a.points[b].y));
 	}
+	SDL_RenderDrawLine(renderer, (int)round(a.points[0].x), (int)round(a.points[0].y), (int)round(a.points[2].x), (int)round(a.points[2].y));
+	SDL_RenderDrawLine(renderer, (int)round(a.points[1].x), (int)round(a.points[1].y), (int)round(a.points[3].x), (int)round(a.points[3].y));
+
 }
 
 void Draw::drawPaddle(Paddle a, SDL_Renderer* renderer) {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-
+	SDL_RenderDrawLine(renderer, a.x - a.width / 2, a.y - a.height / 2, a.x + a.width / 2, a.y - a.height / 2);
+	SDL_RenderDrawLine(renderer, a.x + a.width / 2, a.y - a.height / 2, a.x + a.width / 2, a.y + a.height / 2);
+	SDL_RenderDrawLine(renderer, a.x + a.width / 2, a.y + a.height / 2, a.x - a.width / 2, a.y + a.height / 2);
+	SDL_RenderDrawLine(renderer, a.x - a.width / 2, a.y + a.height / 2, a.x - a.width / 2, a.y - a.height / 2);
 }
 
 SDL_Texture* Draw::loadTexture(std::string path, SDL_Renderer* renderer) {
