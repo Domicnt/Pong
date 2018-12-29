@@ -6,7 +6,7 @@ class Draw {
 		void drawBall(Ball &a, SDL_Renderer* renderer);
 		void drawPaddle(Paddle a, SDL_Renderer* renderer);
 
-		void drawScore(short int score, SDL_Renderer* renderer);
+		void drawScore(int score, SDL_Renderer* renderer);
 
 		SDL_Texture* loadTexture(std::string path, SDL_Renderer* renderer);
 		void free();

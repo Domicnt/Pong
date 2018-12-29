@@ -33,12 +33,6 @@ struct Ball {
 	float x;
 	float y;
 
-	float velY;
-	float velX;
-
-	float forceX;
-	float forceY;
-
 	int radius;
 
 	//at four just to make testing thing easier, it should be at 8 or 16
@@ -53,10 +47,10 @@ struct Ball {
 class Collision {
 	public:
 		void BallvsEdge(Ball &ball);
-		void BallvsPaddles(Ball &ball, Paddle a, Paddle b);
+		void BallvsPaddles(Ball &ball, Paddle a, Paddle b, int &score);
 		void PaddlesvsEdge(Paddle &a, Paddle &b);
 
-		int score = 0;
+		int lastCollision; // to keep track of which paddle the ball last touched, for scoring reasons
 	private:
 
 };

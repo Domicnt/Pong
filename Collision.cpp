@@ -2,42 +2,43 @@
 
 void Collision::BallvsEdge(Ball &ball) {
 	for (int i = 0; i < 4; i++) {
-		if (ball.points[i].x > SCREEN_WIDTH - 1) {
-			ball.points[i].x = SCREEN_WIDTH - 1;
-			ball.points[i].velX = 0;
-		} else if (ball.points[i].x < 0 + 1) {
-			ball.points[i].x = 0 + 1;
-			ball.points[i].velX = 0;
+		if (ball.points[i].x > SCREEN_WIDTH - 1 || ball.points[i].x < 0 + 1) {
+			move.resetBall(ball);
 		}
 		if (ball.points[i].y > SCREEN_HEIGHT - 1) {
 			ball.points[i].y = SCREEN_HEIGHT - 1;
 			ball.points[i].velY = 0;
+			ball.points[i].velX *= EdgeFriction;
 		} else if (ball.points[i].y < 0 + 1) {
 			ball.points[i].y = 0 + 1;
 			ball.points[i].velY = 0;
+			ball.points[i].velX *= EdgeFriction;
 		}
 	}
 }
 
-void Collision::BallvsPaddles(Ball &ball, Paddle a, Paddle b) {
-	for (int i = 0; i < sizeof(ball.points); i++) {
-		if (ball.points[i].x <= a.x + a.width / 2) {
+void Collision::BallvsPaddles(Ball &ball, Paddle a, Paddle b, int &score) {
+	for (int i = 0; i < 4; i++) {
+		if (ball.points[i].x <= a.x + a.width / 2 && ball.points[i].y <= a.y + a.height / 2 && ball.points[i].y >= a.y - a.height / 2) {
 			ball.points[i].x = a.x + a.width / 2;
 			ball.points[i].velX = 0;
 			ball.points[i].forceY += a.velY * Friction;
-		} else if (ball.points[i].x >= b.x - b.width / 2) {
+			if (lastCollision == 2) {
+				lastCollision = 1;
+				score++;
+			} else {
+				lastCollision = 1;
+			}
+		} else if (ball.points[i].x >= b.x - b.width / 2 && ball.points[i].y <= b.y + b.height / 2 && ball.points[i].y >= b.y - b.height / 2) {
 			ball.points[i].x = b.x - b.width / 2;
 			ball.points[i].velX = 0;
 			ball.points[i].forceY += b.velY * Friction;
-		}
-
-		if (ball.points[i].y <= a.y + a.height / 2) {
-			ball.points[i].y = a.y + a.height / 2;
-			ball.points[i].velY = 0;
-		}
-		else if (ball.points[i].y >= b.y - b.height / 2) {
-			ball.points[i].y = b.y - b.height / 2;
-			ball.points[i].velY = 0;
+			if (lastCollision == 1) {
+				lastCollision = 2;
+				score++;
+			} else {
+				lastCollision = 2;
+			}
 		}
 	}
 }
@@ -65,11 +66,13 @@ Ball::Ball(){
 
 	radius = 20;
 
+	srand(time(NULL)); // need to make it actually random, time is always the same rn
+
 	for (int i = 0; i < 4; i++) {
 		points[i].forceX = 0;
 		points[i].forceY = 0;
-		points[i].velX = 0;
-		points[i].velY = 0;
+		points[i].velX = rand() % 3 + 1;
+		points[i].velY = rand() % 3 + 1;
 	}
 
 	points[0].x = x;

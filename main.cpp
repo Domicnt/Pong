@@ -6,8 +6,11 @@ int main(int argc, char args[]) {
 	//event handler
 	SDL_Event e;
 
-	//set the timescale
+	//set the timescale - not currently in use
 	float timescale = 1;
+
+	//initialize score variables
+	int score = 0;
 
 	//randomness
 	srand((unsigned)time(0));
@@ -36,16 +39,17 @@ int main(int argc, char args[]) {
 		input.keyboardInput(e);
 		
 		collision.PaddlesvsEdge(player1, player2);
+		collision.BallvsPaddles(ball, player1, player2, score);
 		collision.BallvsEdge(ball);
 
 		move.movePaddles(player1, player2, input.pressedKeys);
 		move.moveBall(ball);
-		//ball.points[0].x = SCREEN_WIDTH / 2;
-		//ball.points[0].y = SCREEN_HEIGHT / 2 - 20;
 
 		draw.drawBall(ball, initialize.renderer);
 		draw.drawPaddle(player1, initialize.renderer);
 		draw.drawPaddle(player2, initialize.renderer);
+
+		draw.drawScore(score, initialize.renderer);
 
 		//renders to screen
 		SDL_RenderPresent(initialize.renderer);

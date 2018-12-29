@@ -32,7 +32,7 @@ SDL_Texture* Draw::loadTexture(std::string path, SDL_Renderer* renderer) {
 	return newTexture;
 }
 
-void Draw::drawScore(short int score, SDL_Renderer * renderer) {
+void Draw::drawScore(int score, SDL_Renderer * renderer) {
 	int num1 = (int)round(floor(score / 10));
 	int num2 = score;
 	while (num2 >= 10) {

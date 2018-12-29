@@ -23,4 +23,5 @@ static Draw draw;
 constexpr auto Pi = 3.141592;
 constexpr auto SCREEN_WIDTH = 640;
 constexpr auto SCREEN_HEIGHT = 360;
-constexpr auto Friction = .2;
+constexpr auto Friction = .25;
+constexpr auto EdgeFriction = .95;

@@ -2,6 +2,26 @@
 
 void Move::resetBall(Ball &ball) {
 	
+	srand(time(NULL));
+
+	for (int i = 0; i < 4; i++) {
+		ball.points[i].forceX = 0;
+		ball.points[i].forceY = 0;
+		ball.points[i].velX = rand() % 3 + 1;
+		ball.points[i].velY = rand() % 3 + 1;
+	}
+
+	ball.points[0].x = ball.x;
+	ball.points[0].y = ball.y - ball.radius;
+
+	ball.points[1].x = ball.x - ball.radius;
+	ball.points[1].y = ball.y;
+
+	ball.points[2].x = ball.x;
+	ball.points[2].y = ball.y + ball.radius;
+
+	ball.points[3].x = ball.x + ball.radius;
+	ball.points[3].y = ball.y;
 }
 
 void Move::resetPaddles(Paddle &a, Paddle &b) {
@@ -14,7 +34,7 @@ void Move::resetPaddles(Paddle &a, Paddle &b) {
 
 
 void Move::moveBall(Ball &ball) {
-	float k = .5;
+	float k = .05;
 	float difference;
 	float slope;
 	for (int i = 0; i < 4; i++) {//need to make the '4' into the size of the array of points or springs
@@ -27,8 +47,8 @@ void Move::moveBall(Ball &ball) {
 		ball.points[i].y += ball.points[i].velY;
 
 		//reset forces
-		ball.points[i].forceX = (float)round(0);
-		ball.points[i].forceY = 0.1;
+		ball.points[i].forceX = 0;
+		ball.points[i].forceY = 0;
 	}
 	for (int i = 0; i < 6; i++) {//need to make the '6' into the size of the array of points or springs
 		//calculate change in forces due to springs
@@ -47,17 +67,17 @@ void Move::moveBall(Ball &ball) {
 
 void Move::movePaddles(Paddle &a, Paddle &b, bool pressedKeys[4]) {
 	if (pressedKeys[0]) {//w
-		a.velY -= 1;
+		a.velY -= .33;
 	}
 	if (pressedKeys[1]) {//s
-		a.velY += 1;
+		a.velY += .33;
 	}
 
 	if (pressedKeys[2]) {//UP
-		b.velY -= 1;
+		b.velY -= .33;
 	}
 	if (pressedKeys[3]) {//DOWN
-		b.velY += 1;
+		b.velY += .33;
 	}
 
 	a.velY /= 1.1;
