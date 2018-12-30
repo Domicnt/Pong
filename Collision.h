@@ -36,7 +36,7 @@ struct Ball {
 
 	int radius;
 
-	Point points[7]; // heptagon cus why not
+	Point points[7]; // heptagon cus why not 
 	Spring springs[2 * sizeof(points) / sizeof(points[0])];
 
 	//constructor
