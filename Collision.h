@@ -24,6 +24,7 @@ struct Paddle {
 	int height;
 
 	float velY;
+	float velX;
 
 	//constructor
 	Paddle();
@@ -35,9 +36,8 @@ struct Ball {
 
 	int radius;
 
-	//at four just to make testing thing easier, it should be at 8 or 16
-	Point points[4];
-	Spring springs[6];
+	Point points[7]; // heptagon cus why not
+	Spring springs[2 * sizeof(points) / sizeof(points[0])];
 
 	//constructor
 	Ball();
@@ -47,10 +47,11 @@ struct Ball {
 class Collision {
 	public:
 		void BallvsEdge(Ball &ball);
-		void BallvsPaddles(Ball &ball, Paddle a, Paddle b, int &score);
+		void BallvsPaddles(Ball &ball, Paddle a, Paddle b);
 		void PaddlesvsEdge(Paddle &a, Paddle &b);
 
 		int lastCollision; // to keep track of which paddle the ball last touched, for scoring reasons
+		int score = 0; // rally score
 	private:
 
 };

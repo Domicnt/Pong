@@ -9,12 +9,6 @@ int main(int argc, char args[]) {
 	//set the timescale - not currently in use
 	float timescale = 1;
 
-	//initialize score variables
-	int score = 0;
-
-	//randomness
-	srand((unsigned)time(0));
-	
 	Ball ball;
 
 	Paddle player1, player2;
@@ -39,7 +33,7 @@ int main(int argc, char args[]) {
 		input.keyboardInput(e);
 		
 		collision.PaddlesvsEdge(player1, player2);
-		collision.BallvsPaddles(ball, player1, player2, score);
+		collision.BallvsPaddles(ball, player1, player2);
 		collision.BallvsEdge(ball);
 
 		move.movePaddles(player1, player2, input.pressedKeys);
@@ -49,7 +43,7 @@ int main(int argc, char args[]) {
 		draw.drawPaddle(player1, initialize.renderer);
 		draw.drawPaddle(player2, initialize.renderer);
 
-		draw.drawScore(score, initialize.renderer);
+		draw.drawScore(initialize.renderer, collision.score);
 
 		//renders to screen
 		SDL_RenderPresent(initialize.renderer);

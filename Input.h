@@ -12,7 +12,7 @@ class Input {
 		int mousePosY;
 
 		//1 - w, 2 - s, 3 - UP, 4 - DOWN
-		bool pressedKeys[4];
+		bool pressedKeys[6];
 
 	private:
 

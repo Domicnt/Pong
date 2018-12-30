@@ -7,6 +7,6 @@ class Move {
 		void resetPaddles(Paddle &a, Paddle &b);
 
 		void moveBall(Ball &ball);
-		void movePaddles(Paddle &a, Paddle& b, bool pressedKeys[4]);
+		void movePaddles(Paddle &a, Paddle& b, bool pressedKeys[6]);
 
 };

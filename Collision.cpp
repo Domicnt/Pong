@@ -1,9 +1,10 @@
 #include "Common.h"
 
 void Collision::BallvsEdge(Ball &ball) {
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < sizeof(ball.points) / sizeof(ball.points[0]); i++) {
 		if (ball.points[i].x > SCREEN_WIDTH - 1 || ball.points[i].x < 0 + 1) {
 			move.resetBall(ball);
+			score = 0;
 		}
 		if (ball.points[i].y > SCREEN_HEIGHT - 1) {
 			ball.points[i].y = SCREEN_HEIGHT - 1;
@@ -17,13 +18,13 @@ void Collision::BallvsEdge(Ball &ball) {
 	}
 }
 
-void Collision::BallvsPaddles(Ball &ball, Paddle a, Paddle b, int &score) {
-	for (int i = 0; i < 4; i++) {
+void Collision::BallvsPaddles(Ball &ball, Paddle a, Paddle b) {
+	for (int i = 0; i < sizeof(ball.points) / sizeof(ball.points[0]); i++) {
 		if (ball.points[i].x <= a.x + a.width / 2 && ball.points[i].y <= a.y + a.height / 2 && ball.points[i].y >= a.y - a.height / 2) {
 			ball.points[i].x = a.x + a.width / 2;
 			ball.points[i].velX = 0;
 			ball.points[i].forceY += a.velY * Friction;
-			if (lastCollision == 2) {
+			if (lastCollision != 1) {
 				lastCollision = 1;
 				score++;
 			} else {
@@ -33,7 +34,7 @@ void Collision::BallvsPaddles(Ball &ball, Paddle a, Paddle b, int &score) {
 			ball.points[i].x = b.x - b.width / 2;
 			ball.points[i].velX = 0;
 			ball.points[i].forceY += b.velY * Friction;
-			if (lastCollision == 1) {
+			if (lastCollision != 2) {
 				lastCollision = 2;
 				score++;
 			} else {
@@ -65,46 +66,30 @@ Ball::Ball(){
 	y = (float)round(SCREEN_HEIGHT / 2);
 
 	radius = 20;
-
-	srand(time(NULL)); // need to make it actually random, time is always the same rn
-
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < sizeof(points) / sizeof(points[0]); i++) {
+		points[i].x = x + radius * cos((i + 1) * (Pi * 2) / (sizeof(points) / sizeof(points[0])));
+		points[i].y = y + radius * sin((i + 1) * (Pi * 2) / (sizeof(points) / sizeof(points[0])));
 		points[i].forceX = 0;
 		points[i].forceY = 0;
-		points[i].velX = rand() % 3 + 1;
-		points[i].velY = rand() % 3 + 1;
+		points[i].velX = 3;
+		points[i].velY = 3;
 	}
 
-	points[0].x = x;
-	points[0].y = y - radius;
+	
 
-	points[1].x = x - radius;
-	points[1].y = y;
+	int b = 0;
+	for (int i = 0; i < (sizeof(points) / sizeof(points[0])); i++) {
+		springs[i].a = &points[i % (sizeof(points) / sizeof(points[0]))];
+		springs[i].b = &points[(i + 1) % (sizeof(points) / sizeof(points[0]))];
+		springs[i].optimalDistance = sqrt(pow(springs[i].a->x - springs[i].b->x, 2) + pow(springs[i].a->y - springs[i].b->y, 2));
+	}
+	for (int i = (sizeof(points) / sizeof(points[0])); i < (sizeof(springs) / sizeof(springs[0])); i++) {
+		springs[i].a = &points[b % (sizeof(points) / sizeof(points[0]))];
+		springs[i].b = &points[(b + 2) % (sizeof(points) / sizeof(points[0]))];
+		springs[i].optimalDistance = sqrt(pow(springs[i].a->x - springs[i].b->x, 2) + pow(springs[i].a->y - springs[i].b->y, 2));
+		b++;
+	}
 
-	points[2].x = x;
-	points[2].y = y + radius;
-
-	points[3].x = x + radius;
-	points[3].y = y;
-
-	springs[0].a = &points[0];
-	springs[0].b = &points[1];
-	springs[0].optimalDistance = sqrt(pow(points[0].x - points[1].x, 2) + pow(points[0].y - points[1].y, 2));
-	springs[1].a = &points[1];
-	springs[1].b = &points[2];
-	springs[1].optimalDistance = sqrt(pow(points[1].x - points[2].x, 2) + pow(points[1].y - points[2].y, 2));
-	springs[2].a = &points[2];
-	springs[2].b = &points[3];
-	springs[2].optimalDistance = sqrt(pow(points[2].x - points[3].x, 2) + pow(points[2].y - points[3].y, 2));
-	springs[3].a = &points[3];
-	springs[3].b = &points[0];
-	springs[3].optimalDistance = sqrt(pow(points[3].x - points[0].x, 2) + pow(points[3].y - points[0].y, 2));
-	springs[4].a = &points[0];
-	springs[4].b = &points[2];
-	springs[4].optimalDistance = radius * 2;
-	springs[5].a = &points[1];
-	springs[5].b = &points[3];
-	springs[5].optimalDistance = radius * 2;
 
 	return;
 }
@@ -117,5 +102,6 @@ Paddle::Paddle(){
 	height = 100;
 
 	velY = 0;
+	velX = 0;
 	return;
 }
